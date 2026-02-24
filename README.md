@@ -1,6 +1,6 @@
-# rgz
+# rgo
 
-Search across multiple git repositories with [ripgrep](https://github.com/BurntSushi/ripgrep), pick results with [fzf](https://github.com/junegunn/fzf), and open in [Zed](https://zed.dev) at the matching line.
+ripgrep + fzf + **open** — search across multi-repo workspaces, pick with fzf, and open in your editor at the matching line.
 
 ## The Problem
 
@@ -8,9 +8,11 @@ When working in a workspace that contains multiple git repositories side by side
 
 Using `--no-ignore-vcs` disables **all** `.gitignore` files, which isn't what you want either.
 
-## How rgz solves it
+## How rgo solves it
 
-`rgz` runs ripgrep **inside each sub-repository independently**, so each repo's own `.gitignore` is properly respected. Results are piped through `fzf` for interactive selection, then opened in Zed at the exact matching line.
+rgo runs ripgrep **inside each sub-repository independently**, so each repo's own `.gitignore` is properly respected. Results are piped through fzf for interactive selection, then opened in your editor at the exact matching line.
+
+It also works inside a single repo — it auto-detects the workspace structure.
 
 ```
 workspace/
@@ -25,43 +27,52 @@ workspace/
 └── notes.md         # ← also searched (top-level files)
 ```
 
+## Included Commands
+
+| Command | Editor | Open style |
+|---------|--------|------------|
+| `rgz`   | [Zed](https://zed.dev) | Each selected file opens at `file:line` |
+| `rgv`   | [Neovim](https://neovim.io) | All selected files open in tabs (`nvim -p`) |
+
 ## Requirements
 
 - [ripgrep](https://github.com/BurntSushi/ripgrep)
 - [fzf](https://github.com/junegunn/fzf)
-- [Zed](https://zed.dev)
+- [Zed](https://zed.dev) and/or [Neovim](https://neovim.io)
 - zsh
 
 ## Installation
 
-### Source directly
+Source only the ones you need:
 
 ```bash
 # Add to your .zshrc
-source /path/to/rgz.zsh
+source /path/to/rgo/rgz.zsh   # for Zed
+source /path/to/rgo/rgv.zsh   # for Neovim
 ```
 
-### Copy to your zsh functions directory
+Or copy to your zsh functions directory:
 
 ```bash
-cp rgz.zsh ~/.zsh/functions/rgz
-# Make sure your .zshrc sources files from that directory
+cp rgz.zsh rgv.zsh ~/.zsh/functions/
 ```
 
 ## Usage
 
 ```bash
 # Basic search
-rgz "pattern"
+rgz "pattern"          # search → fzf → Zed
+rgv "pattern"          # search → fzf → Neovim
 
-# With ripgrep options
+# With ripgrep options (passed through as-is)
 rgz "pattern" -g '*.tsx'    # only .tsx files
-rgz "TODO" -i               # case insensitive
+rgv "TODO" -i               # case insensitive
 rgz "className" -t js       # only JavaScript files
 
-# fzf will show results with a preview pane
-# Select one or more results (Tab to multi-select), press Enter
-# Zed opens each file at the matching line
+# fzf controls
+# - Enter: open selected
+# - Tab: toggle multi-select (rgz/rgv both support multi-select)
+# - Preview pane shows matches highlighted in context
 ```
 
 ## License

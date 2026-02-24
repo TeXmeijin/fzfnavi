@@ -1,10 +1,10 @@
-# rgz - ripgrep + fzf + zed
-# Search across sub-repositories (respecting each repo's .gitignore), pick with fzf, open in Zed at the matching line.
+# rgv - ripgrep + fzf + nvim
+# Search across sub-repositories (respecting each repo's .gitignore), pick with fzf, open in nvim tabs at the matching line.
 # Works both in multi-repo workspaces and inside a single repo.
-# Usage: rgz "pattern" [rg options...]
-rgz() {
+# Usage: rgv "pattern" [rg options...]
+rgv() {
   if [[ $# -eq 0 ]]; then
-    echo "Usage: rgz <pattern> [rg options...]"
+    echo "Usage: rgv <pattern> [rg options...]"
     return 1
   fi
 
@@ -38,10 +38,18 @@ rgz() {
     --preview="rg -n --color=always ${(q)1} {1}" \
     --preview-window=right:60%)
 
-  # Open each selected file:line in Zed
   if [[ -n "$selected" ]]; then
-    echo "$selected" | while read -r item; do
-      zed "$item"
-    done
+    local files=()
+    local first_line=""
+
+    while read -r item; do
+      local file="${item%%:*}"
+      local line="${item##*:}"
+      files+=("$file")
+      [[ -z "$first_line" ]] && first_line="$line"
+    done <<< "$selected"
+
+    # Open all files in tabs, jump to first file's matching line
+    nvim -p "${files[@]}" "+${first_line}"
   fi
 }
