@@ -1,6 +1,6 @@
-# rgo
+# fzfnavi
 
-A collection of fzf-powered commands that search your codebase and open results in your editor. Designed for multi-repo workspaces but works in single repos too.
+Navigate your codebase with fzf. Search files, content, and git history across multi-repo workspaces — pick with fzf, open in your editor at the matching line.
 
 ## Commands
 
@@ -86,12 +86,12 @@ Source only the ones you need:
 
 ```bash
 # Add to your .zshrc
-source /path/to/rgo/rgz.zsh   # ripgrep → Zed
-source /path/to/rgo/rgv.zsh   # ripgrep → Neovim
-source /path/to/rgo/fdz.zsh   # fd → Zed
-source /path/to/rgo/fdv.zsh   # fd → Neovim
-source /path/to/rgo/glz.zsh   # git log → Zed (also provides glv's dependency)
-source /path/to/rgo/glv.zsh   # git log → Neovim
+source /path/to/fzfnavi/rgz.zsh   # ripgrep → Zed
+source /path/to/fzfnavi/rgv.zsh   # ripgrep → Neovim
+source /path/to/fzfnavi/fdz.zsh   # fd → Zed
+source /path/to/fzfnavi/fdv.zsh   # fd → Neovim
+source /path/to/fzfnavi/glz.zsh   # git log → Zed (also provides glv's dependency)
+source /path/to/fzfnavi/glv.zsh   # git log → Neovim
 ```
 
 Or copy to your zsh functions directory:
